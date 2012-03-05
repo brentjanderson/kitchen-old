@@ -7,7 +7,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title><?PHP echo ($k_pageTitle != '' ? $k_pageTitle ? 'Kitchen') ?></title>
+  <title><?PHP echo (isset($k_pageTitle) && $k_pageTitle != '' ? $k_pageTitle ? 'Kitchen'); ?></title>
   <meta name="description" content="">
 
   <meta name="viewport" content="width=device-width">
