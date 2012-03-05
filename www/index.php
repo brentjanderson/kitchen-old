@@ -1,8 +1,9 @@
-<?PHP define('k_exec', 1); ?>
+<?PHP define('_kexec', 1); ?>
+<?PHP $k_pageTitle = 'Anderson Kitchen'; ?>
 <?php include('../includes/header.inc'); ?>
 <?php include('../includes/page_header.inc'); ?>
 
-<div role="main">
+<div class="container">
 
 </div>
 
