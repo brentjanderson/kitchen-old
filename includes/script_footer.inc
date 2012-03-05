@@ -12,3 +12,9 @@ var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
 g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
 s.parentNode.insertBefore(g,s)}(document,'script'));
 </script>
+
+<script>
+$('ul.dropdown-menu li a').click(function() {
+    var el = $(this).html();
+});
+</script>

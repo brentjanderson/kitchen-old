@@ -10,8 +10,9 @@
   <title><?PHP echo ($k_pageTitle != '' ? $k_pageTitle : 'Kitchen'); ?></title>
   <meta name="description" content="">
 
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=960">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/kitchen.css">
 
   <script src="js/libs/modernizr-2.5.3.min.js"></script>
