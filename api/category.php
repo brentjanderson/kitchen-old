@@ -8,8 +8,9 @@ $action = (isset($_REQUEST['action']) ? $_REQUEST['action'] : '');
 $categoryName = (isset($_REQUEST['name']) ? $_REQUEST['name'] : '');
 $categoryID = (isset($_REQUEST['id']) ? $_REQUEST['id'] : '');
 
-// Check for certain patterns
+// Security check for certain patterns
 if (!is_int($categoryID) && !isset($categoryID)) errorTerminate('2', 'Bad input. Sound the alarm!!!');
+
 
 switch ($action) {
     case 'add':

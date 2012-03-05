@@ -1,4 +1,6 @@
 var currentCatID, currentCat, currentCatSaveState;
+var k_categoryButtons = '<a href="#" class="btn btn-success categoryEditButton">Edit</a><a href="#" class="btn btn-danger">Delete</a>';
+
 
 function setupEditButtons() {
     $('.categoryEditButton').unbind('click');
@@ -38,7 +40,7 @@ $('#saveModalButton').click(function() {
         if (currentCatSaveState == 'add') {
             // Add a new row to our table
             //@TODO: Get a new ID from the database, use that to add the row
-            $('table.catForm > tbody:last').append('<tr><td>'+newValue+'</td><td><a href="#" class="btn btn-success categoryEditButton">Edit</a></td></tr>');
+            $('table.catForm > tbody:last').append('<tr><td>'+newValue+'</td><td>'+k_categoryButtons+'</td></tr>');
             setupEditButtons(); // Refresh edit button events to include new button
         } else {
             // We have a new category name, let's store it!

@@ -28,8 +28,12 @@ a.btn {
     color: #000;
 }
 
-a.btn-primary, a.btn-success {
+a.btn-primary, a.btn-success, a.btn-danger {
     color: #fff;
+}
+
+td a.btn {
+    margin: 2px 2px 0px 0px;
 }
 
 .navbar {
