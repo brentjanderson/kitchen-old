@@ -29,7 +29,7 @@ switch ($action) {
             $response['response'] = 0;
             $response['id'] = $added_id;
         } elseif ($added_rows == 0) {
-            $response['response'] = 1;
+            $response['responses'] = 1;
         }
         break;
     
@@ -52,8 +52,6 @@ switch ($action) {
         break;
         
     case 'delete':
-        $response['response'] = $sql;
-        
         if (!isset($_REQUEST['id'])) {
             errorTerminate('3', 'Missing input');
         }
@@ -69,7 +67,7 @@ switch ($action) {
         } elseif ($deleted_rows == 0) {
             $response['response'] = 1;
         }
-        $response['sql'] = $sql;
+        $response['sql'] =$sql;
         break;
     
     case 'list':

@@ -48,6 +48,7 @@ $('#saveModalButton').click(function() {
     var newValue = $('#categoryForm div.modal-body input#catName').attr('value');
     if (newValue != currentCat) {
         if (currentCatSaveState == 'add') {
+            // We have a new category name, let's store it!
             $.getJSON("/ajax/category.php", {
                 action: 'add',
                 name: newValue
@@ -60,11 +61,9 @@ $('#saveModalButton').click(function() {
             });
             
         } else {
-            // We have a new category name, let's store it!
             $('#catID-'+currentCatID+' td.catName').html(newValue);
             //@TODO: Send the new value to the API for storage
         }
-        
     }
     
     $('#categoryForm').modal('hide');
@@ -76,13 +75,13 @@ $('#deleteModalButton').click(function() {
         $(this).remove();
         checkTableStatus();
     });
-    console.log(currentCatID);
+
     // Fire off call to API for delete
     $.getJSON("/ajax/category.php", {
         action: 'delete',
         id: currentCatID
     }, function(data) {
-        console.log(data);
+        console.log("Response:", data);
     });
 });
 
