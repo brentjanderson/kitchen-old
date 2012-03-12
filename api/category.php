@@ -52,6 +52,8 @@ switch ($action) {
         break;
         
     case 'delete':
+        $response['response'] = $sql;
+        
         if (!isset($_REQUEST['id'])) {
             errorTerminate('3', 'Missing input');
         }
@@ -67,7 +69,7 @@ switch ($action) {
         } elseif ($deleted_rows == 0) {
             $response['response'] = 1;
         }
-
+        $response['sql'] = $sql;
         break;
     
     case 'list':

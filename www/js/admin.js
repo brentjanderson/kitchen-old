@@ -1,8 +1,8 @@
 var currentCatID, currentCat, currentCatSaveState;
-var k_categoryButtons = '<a href="#" class="btn btn-success categoryEditButton">Edit</a><a href="#" class="btn btn-danger">Delete</a>';
+var k_categoryButtons = '<a href="#" class="btn btn-success categoryEditButton">Edit</a><a href="#" class="btn btn-danger categoryDeleteButton">Delete</a>';
 
 
-function setupEditButtons() {
+function setupTableButtons() {
     $('.categoryEditButton').unbind('click');
     $('.categoryEditButton').click(function() {
         $('#categoryForm div.modal-header h3').html('Edit Category');
@@ -13,12 +13,22 @@ function setupEditButtons() {
         $('#categoryForm div.modal-body input#catName').attr('value', currentCat);
         $('#categoryForm').modal('show');
     });
+    
+    $('.categoryDeleteButton').unbind('click');
+    $('.categoryDeleteButton').click(function() {
+        // Delete the category
+        currentCatID = $(this).parent().parent().attr('catID');
+        currentCat = $(this).parent().siblings('.catName').html();
+        $('#catDeleteConfirmText').html('"'+currentCat+'"');
+        $('#categoryDeleteConfirm').modal('show');
+    });
 }
 
-setupEditButtons();
+setupTableButtons();
 
-$('#closeModalButton').click(function() {
+$('.closeModalButton').click(function() {
     $('#categoryForm').modal('hide');
+    $('#categoryDeleteConfirm').modal('hide');
 });
 
 
@@ -38,10 +48,17 @@ $('#saveModalButton').click(function() {
     var newValue = $('#categoryForm div.modal-body input#catName').attr('value');
     if (newValue != currentCat) {
         if (currentCatSaveState == 'add') {
-            // Add a new row to our table
-            //@TODO: Get a new ID from the database, use that to add the row
-            $('table.catForm > tbody:last').append('<tr><td>'+newValue+'</td><td>'+k_categoryButtons+'</td></tr>');
-            setupEditButtons(); // Refresh edit button events to include new button
+            $.getJSON("/ajax/category.php", {
+                action: 'add',
+                name: newValue
+            }, function(data) {
+                // Add a new row to our table
+                cID = data['id'];
+                $('table.catForm > tbody:last').append('<tr id="catID-'+cID+'" catID="'+cID+'"><td class="catName">'+newValue+'</td><td>'+k_categoryButtons+'</td></tr>');
+                setupTableButtons(); // Refresh edit button events to include new button
+                checkTableStatus();
+            });
+            
         } else {
             // We have a new category name, let's store it!
             $('#catID-'+currentCatID+' td.catName').html(newValue);
@@ -53,4 +70,48 @@ $('#saveModalButton').click(function() {
     $('#categoryForm').modal('hide');
 });
 
+$('#deleteModalButton').click(function() {    
+    $('#categoryDeleteConfirm').modal('hide');
+    $('table.catForm tbody tr#catID-'+currentCatID).hide('slow', function() {
+        $(this).remove();
+        checkTableStatus();
+    });
+    console.log(currentCatID);
+    // Fire off call to API for delete
+    $.getJSON("/ajax/category.php", {
+        action: 'delete',
+        id: currentCatID
+    }, function(data) {
+        console.log(data);
+    });
+});
+
 $('div.modal-body form').submit(function() { return false; });
+
+function checkTableStatus() {
+    if ($('table.catForm tbody tr').length == 0) {
+        $('table.catForm').hide('slow');
+    } else {
+        $('table.catForm').show('slow');
+    }
+}
+
+function buildTable() {
+    $.getJSON('/ajax/category.php', { action: 'list' }, function(data) {
+        result = data['result'];
+        $('table.catForm tbody').empty();
+        checkTableStatus();
+        for (row in result) {
+            cID = result[row].id;
+            newValue = result[row].name;
+            $('table.catForm tbody').append('<tr id="catID-'+cID+'" catID="'+cID+'"><td class="catName">'+newValue+'</td><td>'+k_categoryButtons+'</td></tr>');
+        }
+        checkTableStatus();
+        setupTableButtons();
+        $('.ajaxLoader').hide();
+    });
+}
+
+checkTableStatus();
+
+buildTable();
