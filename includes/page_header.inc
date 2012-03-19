@@ -23,11 +23,6 @@
                 <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu category-menu">
-                    <!--
-                    <li><a href="#">Soups</a></li>
-                    <li><a href="#">Salads</a></li>
-                    <li><a href="#">Link</a></li>
-                    -->
                 </ul>
             </li>
             <li class="divider-vertical"></li>

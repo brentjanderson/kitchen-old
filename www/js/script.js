@@ -11,6 +11,11 @@ function updateNavbarCategories() {
             // Hide the categories menu
             $('.category-menu-container').hide();
         } else {
+            // Update the category list
+            $('.category-menu').html('');
+            for (cat in data.result) {
+                $('ul.category-menu').append('<li><a href="#">'+data.result[cat].name+'</a></li>');
+            }
             $('.category-menu-container').show();
         }
         

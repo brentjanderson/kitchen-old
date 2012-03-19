@@ -67,6 +67,7 @@ $('#saveModalButton').click(function() {
                 id: currentCatID
             }, function(data) {
                 $('#catID-'+currentCatID+' td.catName').html(newValue);
+                checkTableStatus();
             });
         }
     }
