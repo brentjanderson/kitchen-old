@@ -49,7 +49,7 @@ $('#saveModalButton').click(function() {
     if (newValue != currentCat) {
         if (currentCatSaveState == 'add') {
             // We have a new category name, let's store it!
-            $.getJSON("/ajax/category.php", {
+            $.post("/ajax/category.php", {
                 action: 'add',
                 name: newValue
             }, function(data) {
@@ -61,8 +61,13 @@ $('#saveModalButton').click(function() {
             });
             
         } else {
-            $('#catID-'+currentCatID+' td.catName').html(newValue);
-            //@TODO: Send the new value to the API for storage
+            $.post("/ajax/category.php", {
+                action: 'edit',
+                name: newValue,
+                id: currentCatID
+            }, function(data) {
+                $('#catID-'+currentCatID+' td.catName').html(newValue);
+            });
         }
     }
     
@@ -81,7 +86,7 @@ $('#deleteModalButton').click(function() {
         action: 'delete',
         id: currentCatID
     }, function(data) {
-        console.log("Response:", data);
+        
     });
 });
 
@@ -93,10 +98,11 @@ function checkTableStatus() {
     } else {
         $('table.catForm').show('slow');
     }
+    updateNavbarCategories();
 }
 
 function buildTable() {
-    $.getJSON('/ajax/category.php', { action: 'list' }, function(data) {
+    $.post('/ajax/category.php', { action: 'list' }, function(data) {
         result = data['result'];
         $('table.catForm tbody').empty();
         checkTableStatus();

@@ -37,7 +37,7 @@ switch ($action) {
         if (!isset($_REQUEST['id']) || !isset($_REQUEST['name'])) {
             errorTerminate('3', 'Missing input');
         }
-        // Delete the associated category id
+        // Update the associated category id
         $sql = 'UPDATE `category` SET `name` = \''.$categoryName.'\' WHERE `id` = '.$categoryID;
         $result = mysql_query($sql);
         
@@ -49,6 +49,7 @@ switch ($action) {
         } elseif ($updated_rows == 0) {
             $response['response'] = 1;
         }
+
         break;
         
     case 'delete':

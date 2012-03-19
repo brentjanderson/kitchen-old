@@ -16,16 +16,18 @@
             <input type="text" class="search-query" placeholder="Search">
         </form>
         
-        <ul class="nav pull-right">
+        <ul class="nav pull-right category-menu-container" style="display:none">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 Categories
                 <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu category-menu">
+                    <!--
                     <li><a href="#">Soups</a></li>
                     <li><a href="#">Salads</a></li>
                     <li><a href="#">Link</a></li>
+                    -->
                 </ul>
             </li>
             <li class="divider-vertical"></li>
