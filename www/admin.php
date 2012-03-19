@@ -68,5 +68,5 @@
 </div>
 
 <?php include('../includes/script_footer.inc'); ?>
-<script src="js/admin.js"></script>
+<script src="js/admin.js?<?PHP echo time(); ?>"></script>
 <?php include('../includes/footer.inc'); ?>
