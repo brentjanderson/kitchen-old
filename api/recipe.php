@@ -5,11 +5,16 @@ header('Content-type: text/json');
 
 // Grab inputs
 $action = (isset($_REQUEST['action']) ? $_REQUEST['action'] : '');
-$categoryName = (isset($_REQUEST['name']) ? $_REQUEST['name'] : '');
-$categoryID = (isset($_REQUEST['id']) ? $_REQUEST['id'] : '');
+$recipeID = (isset($_REQUEST['id']) ? $_REQUEST['id'] : '');
+$recipeName = (isset($_REQUEST['name']) ? $_REQUEST['name'] : '');
+$recipeDesc = (isset($_REQUEST['desc']) ? $_REQUEST['desc'] : '');
+$recipeText = (isset($_REQUEST['recipe']) ? $_REQUEST['recipe'] : '');
+$category_id = (isset($_REQUEST['catid']) ? $_REQUEST['catid'] : '');
+
+$recipeID = (isset($_REQUEST['id']) ? $_REQUEST['id'] : '');
 
 // Security check for certain patterns
-if (!is_int($categoryID) && !isset($categoryID)) errorTerminate('2', 'Bad input. Sound the alarm!!!');
+if (!is_int($recipeID) && !isset($recipeID)) errorTerminate('2', 'Bad input. Sound the alarm!!!');
 
 
 switch ($action) {
@@ -18,10 +23,10 @@ switch ($action) {
             errorTerminate('3', 'Missing input');
         }
         // Delete the associated category id
-        $sql = 'INSERT INTO `category` (`name`) VALUES (\''.$categoryName.'\')';
+        $sql = 'INSERT INTO `recipe` (`name`, `description`, `recipe`, `category_id`) VALUES (\''.$recipeName.'\', \''.$recipeDesc.'\', \''.$recipeText.'\', \''.$category_id.'\')';
         $result = mysql_query($sql);
-        
-        if (!$result) errorTerminate('4', 'Error adding category.');
+
+        if (!$result) errorTerminate('4', 'Error adding recipe.');
         
         $added_rows = mysql_affected_rows();
         $added_id = mysql_insert_id();
@@ -34,14 +39,36 @@ switch ($action) {
         break;
     
     case 'edit':
-        if (!isset($_REQUEST['id']) || !isset($_REQUEST['name'])) {
+        if (!isset($_REQUEST['id'])) {
             errorTerminate('3', 'Missing input');
         }
         // Update the associated category id
-        $sql = 'UPDATE `category` SET `name` = \''.$categoryName.'\' WHERE `id` = '.$categoryID;
+        $sql = 'UPDATE `recipe` SET';
+        $baseSQL = $sql;
+        if (isset($_REQUEST['name'])) 
+        {
+            $sql .= ' `name` = \''.$recipeName.'\'';
+            if ($sql != $baseSQL) $sql .= ',';
+        }
+        if (isset($_REQUEST['desc']))
+        { 
+            $sql .= ' `description` = \''.$recipeDesc.'\'';
+            if ($sql != $baseSQL) $sql .= ',';
+        }
+        if (isset($_REQUEST['recipe']))
+        {
+            $sql .= ' `recipe` = \''.$recipeText.'\'';
+            if ($sql != $baseSQL) $sql .= ',';
+        }
+        if (isset($_REQUEST['catid']))
+        {
+            $sql .= ' `category_id` = \''.$category_id.'\'';
+        }
+        if (substr($sql, -1) == ',') { $sql = substr_replace($sql, '', -1); }
+        $sql .= ' WHERE `id` = '.$recipeID;
         $result = mysql_query($sql);
         
-        if (!$result) errorTerminate('4', 'Error editing category.');
+        if (!$result) errorTerminate('4', 'Error editing recipe.');
         
         $updated_rows = mysql_affected_rows();
         if ($updated_rows > 0) {
@@ -57,10 +84,10 @@ switch ($action) {
             errorTerminate('3', 'Missing input');
         }
         // Delete the associated category id
-        $sql = 'DELETE FROM `category` WHERE `id` = '.$categoryID;
+        $sql = 'DELETE FROM `recipe` WHERE `id` = '.$recipeID;
         $result = mysql_query($sql);
         
-        if (!$result) errorTerminate('4', 'Error deleting category.');
+        if (!$result) errorTerminate('4', 'Error deleting recipe.');
         
         $deleted_rows = mysql_affected_rows();
         if ($deleted_rows > 0) {
@@ -68,14 +95,15 @@ switch ($action) {
         } elseif ($deleted_rows == 0) {
             $response['response'] = 1;
         }
+
         break;
     
     case 'list':
         if (isset($_REQUEST['id'])) {
-            $sql = 'SELECT * FROM category WHERE id='.$categoryID;
+            $sql = 'SELECT * FROM recipe WHERE id='.$recipeID;
         } else {
             // List all categories in the database
-            $sql = 'SELECT * FROM category';
+            $sql = 'SELECT * FROM recipe';
         }
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
