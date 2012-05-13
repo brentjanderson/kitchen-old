@@ -5,7 +5,7 @@
 
 <div class="container">
     <a id="addRecipe" class="btn btn-primary pull-right" href="#">New Recipe</a>
-    <div class="bubbles">
+    <div class="bubbles"><!-- Bubbles for categorical-based searching -->
     </div>
     <ul class="recipeGrid span10">
        <li><img src="/img/ajax-loader.gif" alt="Loading..." /></li>
@@ -31,6 +31,23 @@
   <div class="modal-footer">
     <a href="#" id="saveModalButton" class="btn btn-primary">Save changes</a>
     <a href="#" class="btn closeModalButton">Cancel</a>
+  </div>
+</div>
+
+<div class="modal fade" id="recipeReader" style="display: none" recipeID="">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3><!-- Name --></h3>
+    <h4><!-- Category Name --></h4>
+  </div>
+  <div class="modal-body">
+    <h4><!-- Description --></h4>
+    <p><!-- Recipe --></p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-danger deleteRecipe">Delete</a>
+    <a href="#" class="btn btn-success">Edit</a>
+    <a href="#" id="closeReader" class="btn closeModalButton">Close</a>
   </div>
 </div>
 

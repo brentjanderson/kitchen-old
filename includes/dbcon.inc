@@ -14,6 +14,13 @@ $dsn = array(
         'database' => 'aclan_kitchen'
             );
 
+$dsn = array(
+        'username' => 'root',
+        'password' => 'root',
+        'hostname' => 'localhost',
+        'database' => 'aclan_kitchen'
+            );
+
 $link = mysql_connect($dsn['hostname'], $dsn['username'], $dsn['password']);
 mysql_select_db($dsn['database']);
 

@@ -1,13 +1,26 @@
 function displayRecipe(recipeID) {
-    $.post('/ajax/recipe.php', { action: 'delete', id: recipeID }, function(data){
-        updateRecipeGrid();
-        console.log(data);
+
+    $.post('/ajax/recipe.php', { action: 'list', id: recipeID }, function(data){
+        rID = data.result[0].id;
+        rDesc = data.result[0].description;
+        rCat_ID = data.result[0].category_id;
+        rName = data.result[0].name;
+        rRecipe = data.result[0].recipe;
+        
+        $('#recipeReader div.modal-header h3').html(rName);
+        $('#recipeReader div.modal-body h4').html(rDesc);
+        $('#recipeReader div.modal-body p').html(rRecipe);
+        $('#recipeReader').attr('recipeID', rID);
+        
+        $('#recipeReader').modal('show');
     });
 }
 
 function updateRecipeGrid() {
     $('.recipeGrid').html('<li><img src="/img/ajax-loader.gif" alt="Loading..." /></li>');
     $.post('/ajax/recipe.php', { action: 'list' }, function(data) {
+        $('.recipe').unbind('click');
+        
         $('.recipeGrid').html('');
         for (recipe in data.result)
         {
@@ -45,7 +58,7 @@ function updateRecipeCategories(activeID) {
         {
             el = data.result[category];
             if (activeID == el.id) {
-                $('.recipeSelect').append('<option selected>'+el.name+'</option>');
+                $('.recipeSelect').append('<option value="'+el.id+'" selected>'+el.name+'</option>');
             } else {
                 $('.recipeSelect').append('<option value="'+el.id+'">'+el.name+'</option>');
             }
@@ -57,7 +70,10 @@ function updateRecipeCategories(activeID) {
 
 $('#addRecipe').click(function() {
     $('#recipeEditor div.modal-header h3').html('Add Recipe');
-    $('#recipeName').html('');
+    $('#recipeName').val('');
+    $('#recipeDesc').val('');
+    $('#recipeText').val('');
+    updateRecipeCategories(-1);
     $('#saveModalButton').html('Add Recipe');
     updateRecipeCategories(-1);
     $('#recipeEditor').modal('show');
@@ -65,6 +81,14 @@ $('#addRecipe').click(function() {
 
 $('.closeModalButton').click(function() {
     $(this).parent().parent('.modal').modal('hide');
+});
+
+$('.deleteRecipe').click(function() {
+    var recID = $(this).parent().parent('.modal').attr('recipeID');
+    $.post('/ajax/recipe.php', {action: 'delete', id: recID}, function(data) {
+        updateRecipeGrid();
+        $('#recipeReader').modal('hide');
+    });
 });
 
 function modalAlert(modal, alertString) {

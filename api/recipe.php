@@ -100,15 +100,17 @@ switch ($action) {
     
     case 'list':
         if (isset($_REQUEST['id'])) {
-            $sql = 'SELECT * FROM recipe WHERE id='.$recipeID;
+            $sql = 'SELECT * FROM `recipe`, `category` WHERE `recipe`.id='.$recipeID.' AND `recipe`.category_id = `category`.id';
         } else {
             // List all categories in the database
-            $sql = 'SELECT * FROM recipe';
+            $sql = 'SELECT `recipe`.*, `category`.name AS \'category_name\' FROM `recipe`, `category` WHERE `recipe`.category_id = `category`.id';
         }
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $response['result'][] = $row;
         }
+        
+        //$response['result'] = $sql;
         
         mysql_free_result($result);
         
