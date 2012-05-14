@@ -1,10 +1,27 @@
 <?php
-$this->breadcrumbs=array(
-	'Recipe',
-);?>
-<h1><?php echo $this->id . '/' . $this->action->id; ?></h1>
+$this->breadcrumbs = array(
+    'Recipe',
+);
+?>
+<div class="container-fluid container">
+    <div class="row-fluid page-header">
+        <h1 class="span12">The Recipebox!</h1>
+    </div>
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well">
+                <ul class="nav nav-list">
+                    <li class="nav-header">
+                        Categories
+                    </li>
+                </ul>
+                <ul class="nav nav-list category-list">
 
-<p>
-	You may change the content of this page by modifying
-	the file <tt><?php echo __FILE__; ?></tt>.
-</p>
+                </ul>
+            </div>
+        </div>
+        <div class="span9 recipe-box">
+            
+        </div>
+    </div>
+</div>
