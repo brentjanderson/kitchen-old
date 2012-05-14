@@ -1,28 +1,109 @@
-CREATE TABLE tbl_user (
-    id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(128) NOT NULL,
-    password VARCHAR(128) NOT NULL,
-    email VARCHAR(128) NOT NULL
-);
+-- phpMyAdmin SQL Dump
+-- version 3.3.9.2
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: May 13, 2012 at 08:12 PM
+-- Server version: 5.5.9
+-- PHP Version: 5.3.6
 
-INSERT INTO tbl_user (username, password, email) VALUES ('test1', 'pass1', 'test1@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test2', 'pass2', 'test2@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test3', 'pass3', 'test3@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test4', 'pass4', 'test4@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test5', 'pass5', 'test5@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test6', 'pass6', 'test6@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test7', 'pass7', 'test7@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test8', 'pass8', 'test8@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test9', 'pass9', 'test9@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test10', 'pass10', 'test10@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test11', 'pass11', 'test11@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test12', 'pass12', 'test12@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test13', 'pass13', 'test13@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test14', 'pass14', 'test14@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test15', 'pass15', 'test15@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test16', 'pass16', 'test16@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test17', 'pass17', 'test17@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test18', 'pass18', 'test18@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test19', 'pass19', 'test19@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test20', 'pass20', 'test20@example.com');
-INSERT INTO tbl_user (username, password, email) VALUES ('test21', 'pass21', 'test21@example.com');
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `kitchen`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category`
+--
+
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `category`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recipe`
+--
+
+CREATE TABLE `recipe` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `recipe`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recipeHasTag`
+--
+
+CREATE TABLE `recipeHasTag` (
+  `recipe_id` int(11) NOT NULL,
+  `tag_id` int(11) NOT NULL,
+  KEY `recipe_id` (`recipe_id`),
+  KEY `tag_id` (`tag_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `recipeHasTag`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tag`
+--
+
+CREATE TABLE `tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `tag`
+--
+
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `recipe`
+--
+ALTER TABLE `recipe`
+  ADD CONSTRAINT `recipe_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+
+--
+-- Constraints for table `recipeHasTag`
+--
+ALTER TABLE `recipeHasTag`
+  ADD CONSTRAINT `recipeHasTag_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipe` (`id`),
+  ADD CONSTRAINT `recipeHasTag_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`);

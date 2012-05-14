@@ -9,6 +9,7 @@ return array(
     'name' => 'The Connoisseur\'s Cookbook',
     // preloading 'log' component
     'preload' => array('log'),
+    'defaultController' => 'recipe',
     // autoloading model and component classes
     'import' => array(
         'application.models.*',
@@ -30,7 +31,6 @@ return array(
             // enable cookie-based authentication
             'allowAutoLogin' => true,
         ),
-        // uncomment the following to enable URLs in path-format
 
         'urlManager' => array(
             'urlFormat' => 'path',

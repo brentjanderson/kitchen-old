@@ -1,58 +1,60 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="language" content="en" />
+<?PHP
+Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl . '/js/plugins.js', CClientScript::POS_END);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl . '/js/script.js', CClientScript::POS_END);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl . '/js/libs/modernizr-2.5.3.min.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl . '/js/libs/bootstrap.min.js', CClientScript::POS_END);
+?>
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="en" />
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
+        <link rel="stylesheet" type="text/css" href="<?PHP echo Yii::app()->request->baseUrl; ?>/css/style.css">
+        <link rel="stylesheet" type="text/css" href="<?PHP echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="<?PHP echo Yii::app()->request->baseUrl; ?>/css/kitchen.css">
 
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
+        <meta name="viewport" content="width=960">
 
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-</head>
+        <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+    </head>
 
-<body>
+    <body>
+        <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+        <div class="navbar navbar-fixed-top" style="position:static;">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="/">Mom's Kitchen</a>
 
-<div class="container" id="page">
+                    <form class="navbar-search pull-right">
+                        <input type="text" class="search-query" placeholder="Search">
+                    </form>
+                    <ul class="nav pull-right">
+                        <li><a href="#">New Recipe</a></li>
+                        <li><a href="#">List Recipes</a></li>
+                        <li class="divider-vertical"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <?php if (isset($this->breadcrumbs)): ?>
+            <div class="container">
+                <?php
+                $this->widget('zii.widgets.CBreadcrumbs', array(
+                    'links' => $this->breadcrumbs,
+                ));
+                ?><!-- breadcrumbs -->
+            </div>
+        <?php endif ?>
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
+        <?php echo $content; ?>
 
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
-
-	<?php echo $content; ?>
-
-	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div><!-- footer -->
-
-</div><!-- page -->
-
-</body>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+    </body>
 </html>
