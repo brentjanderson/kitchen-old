@@ -1,6 +1,12 @@
+var currentRecipe = '';
+
 function displayRecipe(recipeID) {
 
-    $.post('/ajax/recipe.php', { action: 'list', id: recipeID }, function(data){
+    $.post('/ajax/recipe.php', {
+        action: 'list', 
+        id: recipeID
+    }, function(data){
+        currentRecipe = data;
         rID = data.result[0].id;
         rDesc = data.result[0].description;
         rCat_ID = data.result[0].category_id;
@@ -18,7 +24,9 @@ function displayRecipe(recipeID) {
 
 function updateRecipeGrid() {
     $('.recipeGrid').html('<li><img src="/img/ajax-loader.gif" alt="Loading..." /></li>');
-    $.post('/ajax/recipe.php', { action: 'list' }, function(data) {
+    $.post('/ajax/recipe.php', {
+        action: 'list'
+    }, function(data) {
         $('.recipe').unbind('click');
         
         $('.recipeGrid').html('');
@@ -41,7 +49,9 @@ function updateRecipeGrid() {
 updateRecipeGrid();
 
 function updateRecipeCategories(activeID) {
-    $.post('/ajax/category.php', {action: 'list'}, function(data) {
+    $.post('/ajax/category.php', {
+        action: 'list'
+    }, function(data) {
         $('.recipeSelect').html('');
         $('.recipeSelect').unbind('change');
         
@@ -70,24 +80,44 @@ function updateRecipeCategories(activeID) {
 
 $('#addRecipe').click(function() {
     $('#recipeEditor div.modal-header h3').html('Add Recipe');
+    $('#recipeId').val('');
     $('#recipeName').val('');
     $('#recipeDesc').val('');
     $('#recipeText').val('');
     updateRecipeCategories(-1);
     $('#saveModalButton').html('Add Recipe');
-    updateRecipeCategories(-1);
+    $('#recipeEditor').data('state','Add');
+    $('#recipeEditor').modal('show');
+});
+
+$('#editRecipe').click(function () {
+    r = currentRecipe.result[0];
+    $('#recipeEditor div.modal-header h3').html('Edit Recipe');
+    $('#recipeId').val(r.id);
+    $('#recipeName').val(r.name);
+    $('#recipeDesc').val(r.description);
+    $('#recipeText').val(r.recipe);
+    updateRecipeCategories(r.category_id);
+    $('#saveModalButton').html('Save Recipe');
+    $('#recipeEditor').data('state','Edit');
+    $('#recipeReader').modal('hide');
     $('#recipeEditor').modal('show');
 });
 
 $('.closeModalButton').click(function() {
     $(this).parent().parent('.modal').modal('hide');
+    currentRecipe = '';
 });
 
 $('.deleteRecipe').click(function() {
     var recID = $(this).parent().parent('.modal').attr('recipeID');
-    $.post('/ajax/recipe.php', {action: 'delete', id: recID}, function(data) {
+    $.post('/ajax/recipe.php', {
+        action: 'delete', 
+        id: recID
+    }, function(data) {
         updateRecipeGrid();
         $('#recipeReader').modal('hide');
+        currentRecipe = '';
     });
 });
 
@@ -112,6 +142,8 @@ $('#saveModalButton').click(function() {
     recDesc = $('#recipeDesc').val();
     recText = $('#recipeText').val();
     recCat  = $('#recipeCat').val();
+    recId   = $('#recipeId').val();
+    state   = $('#recipeEditor').data('state');
     
     // Input validation
     if (recName == '') {
@@ -122,7 +154,8 @@ $('#saveModalButton').click(function() {
         modalAlert(modal, 'Please choose a category.');
     } else { // We pass!
         modal.children('.modal-body').children('.formAlertBox').fadeOut();
-        $.post('/ajax/recipe.php', {
+        if (state == 'Add') {
+            $.post('/ajax/recipe.php', {
                 action: 'add', 
                 name: recName,
                 desc: recDesc,
@@ -131,7 +164,22 @@ $('#saveModalButton').click(function() {
             }, function(data) {
                 modal.modal('hide');
                 updateRecipeGrid();
-        });
+                currentRecipe = '';
+            });
+        } else {
+            $.post('/ajax/recipe.php', {
+                action: 'edit', 
+                id: recId,
+                name: recName,
+                desc: recDesc,
+                recipe: recText,
+                catid: recCat
+            }, function(data) {
+                modal.modal('hide');
+                updateRecipeGrid();
+                currentRecipe = '';
+            });
+        }
     }
 });
 

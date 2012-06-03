@@ -1,4 +1,5 @@
 <?PHP
+
 require_once('../includes/dbcon.inc');
 
 header('Content-type: text/json');
@@ -14,7 +15,8 @@ $category_id = (isset($_REQUEST['catid']) ? $_REQUEST['catid'] : '');
 $recipeID = (isset($_REQUEST['id']) ? $_REQUEST['id'] : '');
 
 // Security check for certain patterns
-if (!is_int($recipeID) && !isset($recipeID)) errorTerminate('2', 'Bad input. Sound the alarm!!!');
+if (!is_int($recipeID) && !isset($recipeID))
+    errorTerminate('2', 'Bad input. Sound the alarm!!!');
 
 
 switch ($action) {
@@ -23,11 +25,12 @@ switch ($action) {
             errorTerminate('3', 'Missing input');
         }
         // Delete the associated category id
-        $sql = 'INSERT INTO `recipe` (`name`, `description`, `recipe`, `category_id`) VALUES (\''.$recipeName.'\', \''.$recipeDesc.'\', \''.$recipeText.'\', \''.$category_id.'\')';
+        $sql = 'INSERT INTO `recipe` (`name`, `description`, `recipe`, `category_id`) VALUES (\'' . $recipeName . '\', \'' . $recipeDesc . '\', \'' . $recipeText . '\', \'' . $category_id . '\')';
         $result = mysql_query($sql);
 
-        if (!$result) errorTerminate('4', 'Error adding recipe.');
-        
+        if (!$result)
+            errorTerminate('4', 'Error adding recipe.' . $sql);
+
         $added_rows = mysql_affected_rows();
         $added_id = mysql_insert_id();
         if ($added_rows > 0) {
@@ -37,7 +40,7 @@ switch ($action) {
             $response['responses'] = 1;
         }
         break;
-    
+
     case 'edit':
         if (!isset($_REQUEST['id'])) {
             errorTerminate('3', 'Missing input');
@@ -45,31 +48,33 @@ switch ($action) {
         // Update the associated category id
         $sql = 'UPDATE `recipe` SET';
         $baseSQL = $sql;
-        if (isset($_REQUEST['name'])) 
-        {
-            $sql .= ' `name` = \''.$recipeName.'\'';
-            if ($sql != $baseSQL) $sql .= ',';
+        if (isset($_REQUEST['name'])) {
+            $sql .= ' `name` = \'' . $recipeName . '\'';
+            if ($sql != $baseSQL)
+                $sql .= ',';
         }
-        if (isset($_REQUEST['desc']))
-        { 
-            $sql .= ' `description` = \''.$recipeDesc.'\'';
-            if ($sql != $baseSQL) $sql .= ',';
+        if (isset($_REQUEST['desc'])) {
+            $sql .= ' `description` = \'' . $recipeDesc . '\'';
+            if ($sql != $baseSQL)
+                $sql .= ',';
         }
-        if (isset($_REQUEST['recipe']))
-        {
-            $sql .= ' `recipe` = \''.$recipeText.'\'';
-            if ($sql != $baseSQL) $sql .= ',';
+        if (isset($_REQUEST['recipe'])) {
+            $sql .= ' `recipe` = \'' . $recipeText . '\'';
+            if ($sql != $baseSQL)
+                $sql .= ',';
         }
-        if (isset($_REQUEST['catid']))
-        {
-            $sql .= ' `category_id` = \''.$category_id.'\'';
+        if (isset($_REQUEST['catid'])) {
+            $sql .= ' `category_id` = \'' . $category_id . '\'';
         }
-        if (substr($sql, -1) == ',') { $sql = substr_replace($sql, '', -1); }
-        $sql .= ' WHERE `id` = '.$recipeID;
+        if (substr($sql, -1) == ',') {
+            $sql = substr_replace($sql, '', -1);
+        }
+        $sql .= ' WHERE `id` = ' . $recipeID;
         $result = mysql_query($sql);
-        
-        if (!$result) errorTerminate('4', 'Error editing recipe.');
-        
+
+        if (!$result)
+            errorTerminate('4', 'Error editing recipe.');
+
         $updated_rows = mysql_affected_rows();
         if ($updated_rows > 0) {
             $response['response'] = 0;
@@ -78,17 +83,18 @@ switch ($action) {
         }
 
         break;
-        
+
     case 'delete':
         if (!isset($_REQUEST['id'])) {
             errorTerminate('3', 'Missing input');
         }
         // Delete the associated category id
-        $sql = 'DELETE FROM `recipe` WHERE `id` = '.$recipeID;
+        $sql = 'DELETE FROM `recipe` WHERE `id` = ' . $recipeID;
         $result = mysql_query($sql);
-        
-        if (!$result) errorTerminate('4', 'Error deleting recipe.');
-        
+
+        if (!$result)
+            errorTerminate('4', 'Error deleting recipe.');
+
         $deleted_rows = mysql_affected_rows();
         if ($deleted_rows > 0) {
             $response['response'] = 0;
@@ -97,29 +103,26 @@ switch ($action) {
         }
 
         break;
-    
+
     case 'list':
         if (isset($_REQUEST['id'])) {
-            $sql = 'SELECT * FROM `recipe`, `category` WHERE `recipe`.id='.$recipeID.' AND `recipe`.category_id = `category`.id';
+            $sql = 'SELECT `recipe`.*, `category`.name AS \'category_name\' FROM `recipe`, `category` WHERE `recipe`.id=' . $recipeID . ' AND `recipe`.category_id = `category`.id';
         } else {
-            // List all categories in the database
+            // List all recipes in the database
             $sql = 'SELECT `recipe`.*, `category`.name AS \'category_name\' FROM `recipe`, `category` WHERE `recipe`.category_id = `category`.id';
         }
         $result = mysql_query($sql);
+
         while ($row = mysql_fetch_assoc($result)) {
             $response['result'][] = $row;
         }
-        
-        //$response['result'] = $sql;
-        
+
         mysql_free_result($result);
-        
         $response['response'] = 0;
         break;
     default:
         errorTerminate('1', 'Unknown error occurred');
         break;
-    
 }
 
 print json_encode($response);
